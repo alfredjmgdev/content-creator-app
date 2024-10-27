@@ -1,0 +1,37 @@
+[
+  {
+    "id": "1",
+    "name": "Nature",
+    "description": "Content related to natural landscapes, wildlife, and environmental topics",
+    "categoriesIds": ["1", "2", "3"],
+    "coverImage": "https://www.shutterstock.com/shutterstock/photos/1712053135/display_1500/stock-photo-frame-of-food-ingredients-menu-cover-template-top-view-1712053135.jpg"
+  },
+  {
+    "id": "2",
+    "name": "Cooking",
+    "description": "Recipes, cooking techniques, and culinary content",
+    "categoriesIds": ["1", "2", "3"],
+    "coverImage": "/images/themes/cooking.jpg"
+  },
+  {
+    "id": "3",
+    "name": "History",
+    "description": "Historical events, figures, and educational content about the past",
+    "categoriesIds": ["1", "2", "3"],
+    "coverImage": "/images/themes/history.jpg"
+  },
+  {
+    "id": "4",
+    "name": "Programming",
+    "description": "Coding tutorials, programming languages, and software development",
+    "categoriesIds": ["2", "3"],
+    "coverImage": "/images/themes/programming.jpg"
+  },
+  {
+    "id": "5",
+    "name": "Science",
+    "description": "Scientific discoveries, theories, and educational content across various scientific disciplines",
+    "categoriesIds": ["1", "2", "3"],
+    "coverImage": "/images/themes/science.jpg"
+  }
+]

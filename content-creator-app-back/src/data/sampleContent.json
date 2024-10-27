@@ -1,0 +1,123 @@
+[
+  {
+    "id": "1",
+    "title": "Sunset at the beach",
+    "themesIds": ["1"],
+    "values": [
+      {
+        "categoryId": "1",
+        "value": "https://example.com/sunset.jpg"
+      }
+    ],
+    "createdAt": "2023-05-01T12:00:00Z",
+    "userId": "1"
+  },
+  {
+    "id": "2",
+    "title": "How to make pasta",
+    "themesIds": ["2"],
+    "values": [
+      {
+        "categoryId": "2",
+        "value": "https://youtube.com/watch?v=abc123"
+      }
+    ],
+    "createdAt": "2023-05-02T14:30:00Z",
+    "userId": "2"
+  },
+  {
+    "id": "3",
+    "title": "The History of Rome",
+    "themesIds": ["3"],
+    "values": [
+      {
+        "categoryId": "3",
+        "value": "https://example.com/rome-history.txt"
+      }
+    ],
+    "createdAt": "2023-05-03T09:15:00Z",
+    "userId": "1"
+  },
+  {
+    "id": "4",
+    "title": "Mountain landscape",
+    "themesIds": ["1"],
+    "values": [
+      {
+        "categoryId": "1",
+        "value": "https://example.com/mountain.jpg"
+      }
+    ],
+    "createdAt": "2023-05-04T16:45:00Z",
+    "userId": "2"
+  },
+  {
+    "id": "5",
+    "title": "JavaScript tutorial",
+    "themesIds": ["4"],
+    "values": [
+      {
+        "categoryId": "2",
+        "value": "https://youtube.com/watch?v=def456"
+      }
+    ],
+    "createdAt": "2023-05-05T11:20:00Z",
+    "userId": "1"
+  },
+  {
+    "id": "6",
+    "title": "Introduction to Physics",
+    "themesIds": ["5"],
+    "values": [
+      {
+        "categoryId": "3",
+        "value": "https://example.com/physics-intro.txt"
+      }
+    ],
+    "createdAt": "2023-05-06T13:10:00Z",
+    "userId": "2"
+  },
+  {
+    "id": "7",
+    "title": "Nature documentary",
+    "themesIds": ["1"],
+    "values": [
+      {
+        "categoryId": "2",
+        "value": "https://example.com/nature-doc.mp4"
+      }
+    ],
+    "createdAt": "2023-05-07T10:05:00Z",
+    "userId": "1"
+  },
+  {
+    "id": "8",
+    "title": "Cooking show",
+    "themesIds": ["2"],
+    "values": [
+      {
+        "categoryId": "2",
+        "value": "https://example.com/cooking-show.mp4"
+      }
+    ],
+    "createdAt": "2023-05-08T17:40:00Z",
+    "userId": "2"
+  },
+  {
+    "id": "9",
+    "title": "Science of cooking",
+    "themesIds": ["2", "5"],
+    "values": [
+      {
+        "categoryId": "3",
+        "value": "https://example.com/science-cooking.pdf"
+      },
+      {
+        "categoryId": "2",
+        "value": "https://youtube.com/watch?v=ghi789"
+      }
+    ],
+    "createdAt": "2023-05-09T15:30:00Z",
+    "userId": "1"
+  }
+]

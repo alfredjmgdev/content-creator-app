@@ -1,0 +1,17 @@
+[
+  {
+    "id": "1",
+    "type": "image",
+    "label": "Imágenes"
+  },
+  {
+    "id": "2",
+    "type": "video",
+    "label": "Videos de YouTube"
+  },
+  {
+    "id": "3",
+    "type": "text",
+    "label": "Documentos de texto"
+  }
+]
