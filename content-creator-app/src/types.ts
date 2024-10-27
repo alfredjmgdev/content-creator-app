@@ -11,17 +11,19 @@ export interface ContentItem {
 }
 
 export interface ContentTheme {
-  id: string;
+  _id: string;
   name: string;
   description: string;
-  categoriesIds: string[];
+  categoriesIds: Category[];
   coverImage: string;
+  createdAt: string;
 }
 
 export interface Category {
-  id: string;
+  _id: string;
   type: string;
   label: string;
+  createdAt: string;
 }
 
 export type UserType = 'admin' | 'creator' | 'reader';

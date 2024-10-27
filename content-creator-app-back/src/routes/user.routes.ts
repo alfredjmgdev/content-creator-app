@@ -1,6 +1,7 @@
 import express from 'express';
 import { UserController } from '../controllers/user.controller';
 import { authMiddleware } from '../middlewares/auth.middleware';
+import { validateUserType } from '../middlewares/userType.middleware';
 
 const router = express.Router();
 const userController = new UserController();
@@ -56,7 +57,7 @@ router.use(authMiddleware);
  *             schema:
  *               $ref: '#/components/schemas/User'
  */
-router.post('/', userController.createUser.bind(userController));
+router.post('/', authMiddleware, validateUserType(['admin']), userController.createUser.bind(userController));
 
 /**
  * @swagger
@@ -76,7 +77,7 @@ router.post('/', userController.createUser.bind(userController));
  *       404:
  *         description: The user was not found
  */
-router.get('/me', userController.getUserInfoWithToken.bind(userController));
+router.get('/me', authMiddleware, userController.getUserInfoWithToken.bind(userController));
 
 /**
  * @swagger
@@ -101,7 +102,7 @@ router.get('/me', userController.getUserInfoWithToken.bind(userController));
  *       404:
  *         description: The user was not found
  */
-router.get('/:id', userController.getUserById.bind(userController));
+router.get('/:id', authMiddleware, validateUserType(['admin']), userController.getUserById.bind(userController));
 
 /**
  * @swagger
@@ -119,7 +120,7 @@ router.get('/:id', userController.getUserById.bind(userController));
  *               items:
  *                 $ref: '#/components/schemas/User'
  */
-router.get('/', userController.getAllUsers.bind(userController));
+router.get('/', authMiddleware, validateUserType(['admin']),userController.getAllUsers.bind(userController));
 
 /**
  * @swagger
@@ -150,7 +151,7 @@ router.get('/', userController.getAllUsers.bind(userController));
  *       404:
  *         description: The user was not found
  */
-router.put('/:id', userController.updateUser.bind(userController));
+router.put('/:id', authMiddleware, validateUserType(['admin']), userController.updateUser.bind(userController));
 
 /**
  * @swagger
@@ -171,6 +172,6 @@ router.put('/:id', userController.updateUser.bind(userController));
  *       404:
  *         description: The user was not found
  */
-router.delete('/:id', userController.deleteUser.bind(userController));
+router.delete('/:id', authMiddleware, validateUserType(['admin']), userController.deleteUser.bind(userController));
 
 export default router;

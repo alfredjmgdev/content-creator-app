@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import contentCategories from '../data/contentCategories.json';
 import contentThemes from '../data/contentThemes.json';
-import { ContentItem } from '../types';
+import { ContentItem, ContentTheme, Category } from '../types';
 
 interface ModalProps {
   isOpen: boolean;
@@ -10,7 +10,7 @@ interface ModalProps {
   children?: React.ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, title, children }) => {
   if (!isOpen) return null;
 
   return (
@@ -26,9 +26,11 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
 interface NewContentModalProps extends ModalProps {
   contentItem?: ContentItem;
   onSave: (content: ContentItem) => void;
+  themes: ContentTheme[];
+  categories: Category[];
 }
 
-export const NewContentModal: React.FC<NewContentModalProps> = ({ contentItem, onSave, ...props }) => {
+export const NewContentModal: React.FC<NewContentModalProps> = ({ contentItem, onSave, themes, categories, ...props }) => {
   const [formData, setFormData] = useState<ContentItem>(
     contentItem || {
       id: '',
@@ -43,20 +45,19 @@ export const NewContentModal: React.FC<NewContentModalProps> = ({ contentItem, o
   const [allowedCategories, setAllowedCategories] = useState<string[]>([]);
 
   useEffect(() => {
-    const selectedThemes = contentThemes.filter(theme => formData.themesIds.includes(theme.id));
+    const selectedThemes = themes.filter(theme => formData.themesIds.includes(theme._id));
     const allowedCategoryIds = new Set<string>();
     selectedThemes.forEach(theme => {
-      theme.categoriesIds.forEach(categoryId => allowedCategoryIds.add(categoryId));
+      theme.categoriesIds.forEach(category => allowedCategoryIds.add(category._id));
     });
     const newAllowedCategories = Array.from(allowedCategoryIds);
     setAllowedCategories(newAllowedCategories);
 
-    // Remove values with categories that are no longer allowed
     setFormData(prev => ({
       ...prev,
       values: prev.values.filter(value => newAllowedCategories.includes(value.categoryId))
     }));
-  }, [formData.themesIds]);
+  }, [formData.themesIds, themes]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -127,8 +128,8 @@ export const NewContentModal: React.FC<NewContentModalProps> = ({ contentItem, o
             onChange={handleThemeChange}
             className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-text-light dark:text-text-dark bg-input-light dark:bg-input-dark focus:outline-none focus:ring-primary-light dark:focus:ring-primary-dark focus:border-primary-light dark:focus:border-primary-dark focus:z-10 sm:text-sm"
           >
-            {contentThemes.map(theme => (
-              <option key={theme.id} value={theme.id}>{theme.name}</option>
+            {themes.map(theme => (
+              <option key={theme._id} value={theme._id}>{theme.name}</option>
             ))}
           </select>
         </div>
@@ -142,11 +143,11 @@ export const NewContentModal: React.FC<NewContentModalProps> = ({ contentItem, o
                 className="appearance-none rounded-md relative block w-1/3 px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-text-light dark:text-text-dark bg-input-light dark:bg-input-dark focus:outline-none focus:ring-primary-light dark:focus:ring-primary-dark focus:border-primary-light dark:focus:border-primary-dark focus:z-10 sm:text-sm"
               >
                 <option value="">Select category</option>
-                {contentCategories.map(category => (
+                {categories.map(category => (
                   <option 
-                    key={category.id} 
-                    value={category.id}
-                    disabled={!allowedCategories.includes(category.id)}
+                    key={category._id} 
+                    value={category._id}
+                    disabled={!allowedCategories.includes(category._id)}
                   >
                     {category.label}
                   </option>
@@ -331,10 +332,12 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
 
 interface ContentDetailsModalProps extends ModalProps {
   content: ContentItem;
+  themes: ContentTheme[];
+  categories: Category[];
 }
 
-export const ContentDetailsModal: React.FC<ContentDetailsModalProps> = ({ content, ...props }) => {
-  const themes = contentThemes.filter(theme => content.themesIds.includes(theme.id));
+export const ContentDetailsModal: React.FC<ContentDetailsModalProps> = ({ content, themes, categories, ...props }) => {
+  const contentThemes = themes.filter(theme => content.themesIds.includes(theme._id));
 
   return (
     <Modal {...props}>
@@ -343,8 +346,8 @@ export const ContentDetailsModal: React.FC<ContentDetailsModalProps> = ({ conten
         <div>
           <h4 className="text-lg font-medium text-gray-700 dark:text-gray-300">Temas:</h4>
           <ul className="list-disc list-inside text-text-light dark:text-text-dark">
-            {themes.map(theme => (
-              <li key={theme.id}>{theme.name}</li>
+            {contentThemes.map(theme => (
+              <li key={theme._id}>{theme.name}</li>
             ))}
           </ul>
         </div>
@@ -352,7 +355,7 @@ export const ContentDetailsModal: React.FC<ContentDetailsModalProps> = ({ conten
           <h4 className="text-lg font-medium text-gray-700 dark:text-gray-300">Categorías y Valores:</h4>
           <ul className="list-disc list-inside text-text-light dark:text-text-dark">
             {content.values.map((value, index) => {
-              const category = contentCategories.find(cat => cat.id === value.categoryId);
+              const category = categories.find(cat => cat._id === value.categoryId);
               return (
                 <li key={index}>
                   <span className="font-medium">{category?.label}:</span> {value.value}

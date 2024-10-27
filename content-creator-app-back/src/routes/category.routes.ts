@@ -1,12 +1,10 @@
 import express from 'express';
 import { CategoryController } from '../controllers/category.controller';
 import { authMiddleware } from '../middlewares/auth.middleware';
+import { validateUserType } from '../middlewares/userType.middleware';
 
 const router = express.Router();
 const categoryController = new CategoryController();
-
-// Apply authMiddleware to all routes
-router.use(authMiddleware);
 
 /**
  * @swagger
@@ -53,7 +51,7 @@ router.use(authMiddleware);
  *             schema:
  *               $ref: '#/components/schemas/Category'
  */
-router.post('/', categoryController.createCategory.bind(categoryController));
+router.post('/', authMiddleware, validateUserType(['admin']), categoryController.createCategory.bind(categoryController));
 
 /**
  * @swagger
@@ -78,7 +76,7 @@ router.post('/', categoryController.createCategory.bind(categoryController));
  *       404:
  *         description: The category was not found
  */
-router.get('/:id', categoryController.getCategoryById.bind(categoryController));
+router.get('/:id', authMiddleware, validateUserType(['admin']), categoryController.getCategoryById.bind(categoryController));
 
 /**
  * @swagger
@@ -96,7 +94,7 @@ router.get('/:id', categoryController.getCategoryById.bind(categoryController));
  *               items:
  *                 $ref: '#/components/schemas/Category'
  */
-router.get('/', categoryController.getAllCategories.bind(categoryController));
+router.get('/', authMiddleware, validateUserType(['admin']), categoryController.getAllCategories.bind(categoryController));
 
 /**
  * @swagger
@@ -127,7 +125,7 @@ router.get('/', categoryController.getAllCategories.bind(categoryController));
  *       404:
  *         description: The category was not found
  */
-router.put('/:id', categoryController.updateCategory.bind(categoryController));
+router.put('/:id', authMiddleware, validateUserType(['admin']), categoryController.updateCategory.bind(categoryController));
 
 /**
  * @swagger
@@ -148,6 +146,6 @@ router.put('/:id', categoryController.updateCategory.bind(categoryController));
  *       404:
  *         description: The category was not found
  */
-router.delete('/:id', categoryController.deleteCategory.bind(categoryController));
+router.delete('/:id', authMiddleware, validateUserType(['admin']), categoryController.deleteCategory.bind(categoryController));
 
 export default router;

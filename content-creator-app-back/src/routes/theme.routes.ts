@@ -1,12 +1,11 @@
 import express from 'express';
 import { ThemeController } from '../controllers/theme.controller';
 import { authMiddleware } from '../middlewares/auth.middleware';
+import { validateUserType } from '../middlewares/userType.middleware';
 
 const router = express.Router();
 const themeController = new ThemeController();
 
-// Apply authMiddleware to all routes
-router.use(authMiddleware);
 
 /**
  * @swagger
@@ -28,7 +27,7 @@ router.use(authMiddleware);
  *             schema:
  *               $ref: '#/components/schemas/Theme'
  */
-router.post('/', themeController.createTheme.bind(themeController));
+router.post('/', authMiddleware, validateUserType(['admin']), themeController.createTheme.bind(themeController));
 
 /**
  * @swagger
@@ -53,7 +52,7 @@ router.post('/', themeController.createTheme.bind(themeController));
  *       404:
  *         description: The theme was not found
  */
-router.get('/:id', themeController.getThemeById.bind(themeController));
+router.get('/:id', authMiddleware, validateUserType(['admin']), themeController.getThemeById.bind(themeController));
 
 /**
  * @swagger
@@ -71,7 +70,7 @@ router.get('/:id', themeController.getThemeById.bind(themeController));
  *               items:
  *                 $ref: '#/components/schemas/Theme'
  */
-router.get('/', themeController.getAllThemes.bind(themeController));
+router.get('/', authMiddleware, validateUserType(['admin']), themeController.getAllThemes.bind(themeController));
 
 /**
  * @swagger
@@ -102,7 +101,7 @@ router.get('/', themeController.getAllThemes.bind(themeController));
  *       404:
  *         description: The theme was not found
  */
-router.put('/:id', themeController.updateTheme.bind(themeController));
+router.put('/:id', authMiddleware, validateUserType(['admin']), themeController.updateTheme.bind(themeController));
 
 /**
  * @swagger
@@ -123,7 +122,7 @@ router.put('/:id', themeController.updateTheme.bind(themeController));
  *       404:
  *         description: The theme was not found
  */
-router.delete('/:id', themeController.deleteTheme.bind(themeController));
+router.delete('/:id', authMiddleware, validateUserType(['admin']), themeController.deleteTheme.bind(themeController));
 
 /**
  * @swagger
