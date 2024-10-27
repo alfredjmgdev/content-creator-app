@@ -9,6 +9,7 @@ import connectDB from './config/database';
 import authRoutes from './routes/auth.routes';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import contentExplorerRoutes from './routes/contentExplorer.routes';
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.use('/api/themes', themeRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/explorer', contentExplorerRoutes);
 
 app.use((req, res, next) => {
   console.log(`Received request: ${req.method} ${req.url}`);

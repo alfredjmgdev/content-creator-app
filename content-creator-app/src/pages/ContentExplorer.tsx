@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useTheme } from '../utils';
 import { ContentItem, ContentTheme, User, Category } from '../types';
 import { useNavigate } from 'react-router-dom';
-import mockUsers from '../data/mockUsers.json';
 import axios from 'axios';
 
 interface ContentCounts {
@@ -10,16 +9,11 @@ interface ContentCounts {
 }
 
 function ContentExplorer(): JSX.Element {
-  const [contentCounts, setContentCounts] = useState<ContentCounts>({});
-  const [filteredContent, setFilteredContent] = useState<ContentItem[]>([]);
   const { isDarkMode, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [contents, setContents] = useState<ContentItem[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [themes, setThemes] = useState<ContentTheme[]>([]);
 
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
@@ -36,19 +30,6 @@ function ContentExplorer(): JSX.Element {
           setIsAuthenticated(false);
           setUser(null);
         }
-
-        // Fetch themes and categories
-        // const [themesResponse, categoriesResponse] = await Promise.all([
-        //   axios.get<ContentTheme[]>('http://localhost:3000/api/themes'),
-        //   axios.get<Category[]>('http://localhost:3000/api/categories')
-        // ]);
-        
-        // setThemes(themesResponse.data);
-        // setCategories(categoriesResponse.data);
-
-        // Fetch contents
-        const contentsResponse = await axios.get<ContentItem[]>('http://localhost:3000/api/contents');
-        setContents(contentsResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error);
         if (authToken) {

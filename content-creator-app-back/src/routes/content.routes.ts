@@ -1,6 +1,7 @@
 import express from 'express';
 import { ContentController } from '../controllers/content.controller';
 import { authMiddleware } from '../middlewares/auth.middleware';
+import { validateUserType } from '../middlewares/userType.middleware';
 
 const router = express.Router();
 const contentController = new ContentController();
@@ -65,7 +66,7 @@ const contentController = new ContentController();
  *             schema:
  *               $ref: '#/components/schemas/Content'
  */
-router.post('/', authMiddleware, contentController.createContent.bind(contentController));
+router.post('/', authMiddleware, validateUserType(['admin']), contentController.createContent.bind(contentController));
 
 /**
  * @swagger
@@ -90,7 +91,7 @@ router.post('/', authMiddleware, contentController.createContent.bind(contentCon
  *       404:
  *         description: The content was not found
  */
-router.get('/:id', contentController.getContentById.bind(contentController));
+router.get('/:id', authMiddleware, validateUserType(['admin']), contentController.getContentById.bind(contentController));
 
 /**
  * @swagger
@@ -108,7 +109,7 @@ router.get('/:id', contentController.getContentById.bind(contentController));
  *               items:
  *                 $ref: '#/components/schemas/Content'
  */
-router.get('/', contentController.getAllContents.bind(contentController));
+router.get('/', authMiddleware, validateUserType(['admin']), contentController.getAllContents.bind(contentController));
 
 /**
  * @swagger
@@ -139,7 +140,7 @@ router.get('/', contentController.getAllContents.bind(contentController));
  *       404:
  *         description: The content was not found
  */
-router.put('/:id', authMiddleware, contentController.updateContent.bind(contentController));
+router.put('/:id', authMiddleware, validateUserType(['admin']), authMiddleware, contentController.updateContent.bind(contentController));
 
 /**
  * @swagger

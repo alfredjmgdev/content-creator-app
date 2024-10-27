@@ -36,3 +36,9 @@ export interface User {
   createdAt: string;
   type: UserType;
 }
+
+export interface ExplorerData {
+  contents: ContentItem[];
+  themes: ContentTheme[];
+  categories: Category[];
+}
