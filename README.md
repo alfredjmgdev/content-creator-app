@@ -12,15 +12,14 @@ A full-stack application designed for content creators, built with React + Vite 
 ### Backend
 - Node.js
 - Express.js
-- [Add your database choice]
-- [Add any additional backend libraries you're using]
+- MongoDB as a database.
 
 ## ⚙️ Prerequisites
 
-- Node.js (v14.0.0 or higher)
-- npm or yarn
-- [Add any other prerequisites]
+- Docker and docker-compose installed.
 
 ## 🛠️ Installation
 
 1. Clone the repository
+2. Run `docker compose up --build -d` create the containers and run the application.
+3. Go to `http://localhost:5173` to see the application.
