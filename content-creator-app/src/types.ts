@@ -38,7 +38,49 @@ export interface User {
 }
 
 export interface ExplorerData {
-  contents: ContentItem[];
-  themes: ContentTheme[];
-  categories: Category[];
+  contents: ContentItemResponse[];
+  themes: ThemeContentResponse[];
+  categories: CategoryResponse[];
+}
+
+export interface ContentItemResponse {
+  _id: string;
+  title: string;
+  themesIds: ThemeContentResponse[];
+  values: ValueResponse[];
+  userId: UserResponse;
+  createdAt: string;
+}
+
+export interface ThemeContentResponse {
+  _id: string;
+  name: string;
+  description: string;
+  coverImage: string;
+  categoriesIds: CategoryResponse[];
+}
+
+export interface ThemeResponse {
+  _id: string;
+  name: string;
+  description: string;
+  coverImage: string;
+}
+
+export interface ValueResponse {
+  categoryId: CategoryResponse;
+  value: string;
+  _id: string;
+}
+
+export interface CategoryResponse {
+  _id: string;
+  type: string;
+  label: string;
+}
+
+export interface UserResponse {
+  _id: string;
+  username: string;
+  email: string;
 }
