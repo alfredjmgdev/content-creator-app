@@ -66,7 +66,7 @@ const contentController = new ContentController();
  *             schema:
  *               $ref: '#/components/schemas/Content'
  */
-router.post('/', authMiddleware, validateUserType(['admin']), contentController.createContent.bind(contentController));
+router.post('/', authMiddleware, validateUserType(['admin', 'creator']), contentController.createContent.bind(contentController));
 
 /**
  * @swagger
@@ -91,7 +91,7 @@ router.post('/', authMiddleware, validateUserType(['admin']), contentController.
  *       404:
  *         description: The content was not found
  */
-router.get('/:id', authMiddleware, validateUserType(['admin']), contentController.getContentById.bind(contentController));
+router.get('/:id', authMiddleware, validateUserType(['admin', 'creator']), contentController.getContentById.bind(contentController));
 
 /**
  * @swagger
@@ -109,7 +109,7 @@ router.get('/:id', authMiddleware, validateUserType(['admin']), contentControlle
  *               items:
  *                 $ref: '#/components/schemas/Content'
  */
-router.get('/', authMiddleware, validateUserType(['admin']), contentController.getAllContents.bind(contentController));
+router.get('/', authMiddleware, validateUserType(['admin', 'creator']), contentController.getAllContents.bind(contentController));
 
 /**
  * @swagger
@@ -140,7 +140,7 @@ router.get('/', authMiddleware, validateUserType(['admin']), contentController.g
  *       404:
  *         description: The content was not found
  */
-router.put('/:id', authMiddleware, validateUserType(['admin']), authMiddleware, contentController.updateContent.bind(contentController));
+router.put('/:id', authMiddleware, validateUserType(['admin', 'creator']), authMiddleware, contentController.updateContent.bind(contentController));
 
 /**
  * @swagger
@@ -161,6 +161,6 @@ router.put('/:id', authMiddleware, validateUserType(['admin']), authMiddleware, 
  *       404:
  *         description: The content was not found
  */
-router.delete('/:id', authMiddleware, contentController.deleteContent.bind(contentController));
+router.delete('/:id', authMiddleware, validateUserType(['admin', 'creator']), contentController.deleteContent.bind(contentController));
 
 export default router;

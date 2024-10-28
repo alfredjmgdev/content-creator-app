@@ -21,6 +21,10 @@ function ContentExplorer(): JSX.Element {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
+  // Add this helper function at the beginning of the component
+  const isAdmin = user?.type === 'admin';
+  const isCreatorOrAdmin = user?.type === 'creator' || user?.type === 'admin';
+
   const fetchData = async () => {
     try {
       const authToken = localStorage.getItem('authToken');
@@ -124,7 +128,7 @@ function ContentExplorer(): JSX.Element {
     <div className="flex flex-col min-h-screen bg-background-light dark:bg-background-dark">
       <header className="bg-primary-light dark:bg-primary-dark p-4">
         <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-          <h1 className="text-2xl font-bold text-white">Content Creator App {import.meta.env.VITE_BACKEND_URL}</h1>
+          <h1 className="text-2xl font-bold text-white">Content Creator App </h1>
           <div className="flex sm:flex-row flex-col justify-center sm:justify-end sm:space-y-0 gap-[10px]">
             {isAuthenticated && user ? (
               <div className="relative">
@@ -174,26 +178,30 @@ function ContentExplorer(): JSX.Element {
       <main className="container mx-auto px-4 py-8 flex-grow">
         {isAuthenticated && user && (
           <div className="flex justify-between mb-6">
-            <div className="flex gap-4">
+            {isAdmin && (
+              <div className="flex gap-4">
+                <button
+                  onClick={() => navigate('/categories')}
+                  className="p-2 rounded-md bg-purple-500 text-white shadow-md hover:bg-purple-600 transition-colors duration-200"
+                >
+                  Categorías
+                </button>
+                <button
+                  onClick={() => navigate('/themes')}
+                  className="p-2 rounded-md bg-indigo-500 text-white shadow-md hover:bg-indigo-600 transition-colors duration-200"
+                >
+                  Temas
+                </button>
+              </div>
+            )}
+            {isCreatorOrAdmin && (
               <button
-                onClick={() => navigate('/categories')}
-                className="p-2 rounded-md bg-purple-500 text-white shadow-md hover:bg-purple-600 transition-colors duration-200"
+                onClick={handleCreateContent}
+                className="p-2 rounded-md bg-green-500 text-white shadow-md hover:bg-green-600 transition-colors duration-200"
               >
-                Categorías
+                Crear Nuevo Contenido
               </button>
-              <button
-                onClick={() => navigate('/themes')}
-                className="p-2 rounded-md bg-indigo-500 text-white shadow-md hover:bg-indigo-600 transition-colors duration-200"
-              >
-                Temas
-              </button>
-            </div>
-            <button
-              onClick={handleCreateContent}
-              className="p-2 rounded-md bg-green-500 text-white shadow-md hover:bg-green-600 transition-colors duration-200"
-            >
-              Crear Nuevo Contenido
-            </button>
+            )}
           </div>
         )}
 
@@ -228,26 +236,30 @@ function ContentExplorer(): JSX.Element {
                 </div>
               </div>
               <div className="flex gap-2 mt-4">
-                <button
-                  onClick={() => handleViewDetails(content)}
-                  className="p-2 rounded-md bg-blue-500 text-white shadow-md hover:bg-blue-600 transition-colors duration-200"
-                >
-                  Ver Detalles
-                </button>
-                <>
+                {isAuthenticated && (
                   <button
-                    onClick={() => handleUpdateContent(content)}
-                    className="p-2 rounded-md bg-yellow-500 text-white shadow-md hover:bg-yellow-600 transition-colors duration-200"
+                    onClick={() => handleViewDetails(content)}
+                    className="p-2 rounded-md bg-blue-500 text-white shadow-md hover:bg-blue-600 transition-colors duration-200"
                   >
-                    Editar
+                    Ver Detalles
                   </button>
-                  <button
-                    onClick={() => handleDeleteContent(content)}
-                    className="p-2 rounded-md bg-red-500 text-white shadow-md hover:bg-red-600 transition-colors duration-200"
-                  >
-                    Eliminar
-                  </button>
-                </>
+                )}
+                {isCreatorOrAdmin && (
+                  <>
+                    <button
+                      onClick={() => handleUpdateContent(content)}
+                      className="p-2 rounded-md bg-yellow-500 text-white shadow-md hover:bg-yellow-600 transition-colors duration-200"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => handleDeleteContent(content)}
+                      className="p-2 rounded-md bg-red-500 text-white shadow-md hover:bg-red-600 transition-colors duration-200"
+                    >
+                      Eliminar
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           ))}
