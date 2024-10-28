@@ -23,9 +23,23 @@ function ContentExplorer(): JSX.Element {
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [socket, setSocket] = useState<Socket | null>(null);
 
-  // Add this helper function at the beginning of the component
+  // Update the helper functions at the beginning of the component
   const isAdmin = user?.type === 'admin';
   const isCreatorOrAdmin = user?.type === 'creator' || user?.type === 'admin';
+
+  // Add this new helper function
+  const canManageContent = (content: ContentItemResponse) => {
+    console.log('======================')
+    console.log(user)
+    console.log(content.userId)
+    console.log('======================')
+    if (!user) return false;
+    if (user.type === 'admin') return true;
+    if (user.type === 'creator') {
+      return content.userId._id === user._id;
+    }
+    return false;
+  };
 
   const fetchData = async () => {
     try {
@@ -432,7 +446,7 @@ function ContentExplorer(): JSX.Element {
                     Ver Detalles
                   </button>
                 )}
-                {isCreatorOrAdmin && (
+                {canManageContent(content) && (
                   <>
                     <button
                       onClick={() => handleUpdateContent(content)}
