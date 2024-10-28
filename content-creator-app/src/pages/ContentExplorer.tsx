@@ -124,6 +124,56 @@ function ContentExplorer(): JSX.Element {
     }
   };
 
+  // Add these new state variables after the other useState declarations
+  const [titleFilter, setTitleFilter] = useState('');
+  const [themeFilter, setThemeFilter] = useState('');
+
+  // Add new state for category filters
+  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set());
+
+  // Update the filtering function to include categories
+  const filteredContents = explorerData?.contents.filter(content => {
+    const titleMatch = content.title.toLowerCase().includes(titleFilter.toLowerCase());
+    const themeMatch = content.themesIds.some(theme => 
+      theme.name.toLowerCase().includes(themeFilter.toLowerCase())
+    );
+    
+    // If no categories are selected, don't filter by categories
+    const categoryMatch = selectedCategories.size === 0 || 
+      content.values.some(value => selectedCategories.has(value.categoryId._id));
+    
+    return titleMatch && themeMatch && categoryMatch;
+  });
+
+  // Add handler for category checkbox changes
+  const handleCategoryChange = (categoryId: string) => {
+    setSelectedCategories(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(categoryId)) {
+        newSet.delete(categoryId);
+      } else {
+        newSet.add(categoryId);
+      }
+      return newSet;
+    });
+  };
+
+  // Add this function to calculate category counts
+  const getCategoryCounts = () => {
+    const counts: { [key: string]: number } = {};
+    
+    explorerData?.contents.forEach(content => {
+      content.values.forEach(value => {
+        const categoryId = value.categoryId._id;
+        counts[categoryId] = (counts[categoryId] || 0) + 1;
+      });
+    });
+    
+    return counts;
+  };
+
+  const categoryCounts = getCategoryCounts();
+
   return (
     <div className="flex flex-col min-h-screen bg-background-light dark:bg-background-dark">
       <header className="bg-primary-light dark:bg-primary-dark p-4">
@@ -205,8 +255,82 @@ function ContentExplorer(): JSX.Element {
           </div>
         )}
 
+        {/* Add category counters section above filters */}
+        <div className="mb-6 bg-white dark:bg-gray-800 p-4 rounded-md border border-gray-300 dark:border-gray-600">
+          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+            Contenido por categorías:
+          </h3>
+          <div className="flex flex-wrap gap-3">
+            {explorerData?.categories.map((category) => (
+              <div 
+                key={category._id}
+                className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg px-3 py-1"
+              >
+                <span className="text-sm text-gray-700 dark:text-gray-300">
+                  {category.label}:
+                </span>
+                <span className="ml-2 text-sm font-bold text-blue-600 dark:text-blue-400">
+                  {categoryCounts[category._id] || 0}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Update the filter section to include category checkboxes */}
+        <div className="mb-6 space-y-4">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1">
+              <input
+                type="text"
+                placeholder="Filtrar por título..."
+                value={titleFilter}
+                onChange={(e) => setTitleFilter(e.target.value)}
+                className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              />
+            </div>
+            <div className="flex-1">
+              <input
+                type="text"
+                placeholder="Filtrar por tema..."
+                value={themeFilter}
+                onChange={(e) => setThemeFilter(e.target.value)}
+                className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              />
+            </div>
+          </div>
+
+          {/* Add category filter section */}
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-md border border-gray-300 dark:border-gray-600">
+            <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Filtrar por categorías:
+            </h3>
+            <div className="flex flex-wrap gap-4">
+              {explorerData?.categories.map((category) => (
+                <label 
+                  key={category._id}
+                  className="flex items-center space-x-2 cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedCategories.has(category._id)}
+                    onChange={() => handleCategoryChange(category._id)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700 dark:text-gray-300">
+                    {category.label}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t border-gray-200 dark:border-gray-700 my-8"></div>
+
+        {/* Content grid */}
         <div className="grid gap-6">
-          {explorerData?.contents.map((content) => (
+          {filteredContents?.map((content) => (
             <div
               key={content._id}
               className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md"
@@ -218,6 +342,8 @@ function ContentExplorer(): JSX.Element {
                     <p>Creado por: {content.userId.username}</p>
                     <p>Fecha: {new Date(content.createdAt).toLocaleDateString()}</p>
                   </div>
+                  
+                  {/* Themes section */}
                   <div className="mt-2">
                     <p className="text-sm text-gray-600 dark:text-gray-400">Temas:</p>
                     <div className="flex flex-wrap gap-2 mt-1">
@@ -229,6 +355,23 @@ function ContentExplorer(): JSX.Element {
                             className="w-6 h-6 rounded-full object-cover"
                           />
                           <span className="text-sm">{theme.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Add Categories section */}
+                  <div className="mt-4">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Categorías:</p>
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      {content.values.map((value) => (
+                        <div key={value._id} className="bg-blue-100 dark:bg-blue-900 rounded-lg p-2">
+                          <span className="text-sm font-medium text-blue-800 dark:text-blue-100">
+                            {value.categoryId.label}:
+                          </span>
+                          <span className="text-sm ml-1 text-blue-600 dark:text-blue-200">
+                            {value.value}
+                          </span>
                         </div>
                       ))}
                     </div>
