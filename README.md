@@ -25,5 +25,5 @@ A full-stack application designed for content creators, built with React + Vite 
 
 ## 📚 Documentation
 
-You can find it after running the application on this links:
+You can find it after running the application on this link:
 http://localhost:3000/api-docs/
