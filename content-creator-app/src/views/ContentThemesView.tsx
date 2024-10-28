@@ -23,12 +23,12 @@ const ContentThemesView: React.FC = () => {
       try {
         const token = localStorage.getItem('authToken');
         const [themesResponse, categoriesResponse] = await Promise.all([
-          axios.get('http://localhost:3000/api/themes', {
+          axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/themes`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
           }),
-          axios.get('http://localhost:3000/api/categories', {
+          axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/categories`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -52,7 +52,7 @@ const ContentThemesView: React.FC = () => {
   const handleCreateTheme = async (newTheme: Omit<ContentTheme, '_id'>) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('http://localhost:3000/api/themes', newTheme, {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/themes`, newTheme, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -69,7 +69,7 @@ const ContentThemesView: React.FC = () => {
   const handleUpdateTheme = async (updatedTheme: ContentTheme) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.put(`http://localhost:3000/api/themes/${updatedTheme._id}`, updatedTheme, {
+      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/themes/${updatedTheme._id}`, updatedTheme, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -86,7 +86,7 @@ const ContentThemesView: React.FC = () => {
   const handleDeleteTheme = async (id: string) => {
     try {
       const token = localStorage.getItem('authToken');
-      await axios.delete(`http://localhost:3000/api/themes/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/themes/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

@@ -24,7 +24,7 @@ const ContentCategoriesView: React.FC = () => {
     const fetchCategories = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const response = await axios.get('http://localhost:3000/api/categories', {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/categories`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -49,7 +49,7 @@ const ContentCategoriesView: React.FC = () => {
   const handleCreateCategory = async (newCategory: Omit<Category, '_id'>) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.post('http://localhost:3000/api/categories', newCategory, {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/categories`, newCategory, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -66,7 +66,7 @@ const ContentCategoriesView: React.FC = () => {
   const handleUpdateCategory = async (updatedCategory: Category) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.put(`http://localhost:3000/api/categories/${updatedCategory._id}`, updatedCategory, {
+      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/categories/${updatedCategory._id}`, updatedCategory, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -83,7 +83,7 @@ const ContentCategoriesView: React.FC = () => {
   const handleDeleteCategory = async (id: string) => {
     try {
       const token = localStorage.getItem('authToken');
-      await axios.delete(`http://localhost:3000/api/categories/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/categories/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

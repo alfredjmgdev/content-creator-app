@@ -29,10 +29,6 @@ function ContentExplorer(): JSX.Element {
 
   // Add this new helper function
   const canManageContent = (content: ContentItemResponse) => {
-    console.log('======================')
-    console.log(user)
-    console.log(content.userId)
-    console.log('======================')
     if (!user) return false;
     if (user.type === 'admin') return true;
     if (user.type === 'creator') {
@@ -46,7 +42,7 @@ function ContentExplorer(): JSX.Element {
       const authToken = localStorage.getItem('authToken');
       if (authToken) {
         // Fetch user data if authenticated
-        const userResponse = await axios.get<User>('http://localhost:3000/api/users/me', {
+        const userResponse = await axios.get<User>(`${import.meta.env.VITE_BACKEND_URL}/api/users/me`, {
           headers: { Authorization: `Bearer ${authToken}` }
         });
         setIsAuthenticated(true);
@@ -63,7 +59,7 @@ function ContentExplorer(): JSX.Element {
   // Initial data fetch
   const fetchExplorerData = async () => {
     try {
-      const response = await axios.get<ExplorerData>('http://localhost:3000/api/explorer');
+      const response = await axios.get<ExplorerData>(`${import.meta.env.VITE_BACKEND_URL}/api/explorer`);
       setExplorerData(response.data);
     } catch (error) {
       console.error('Error fetching explorer data:', error);
@@ -73,7 +69,7 @@ function ContentExplorer(): JSX.Element {
   // Socket connection setup
   useEffect(() => {
     console.log('Setting up WebSocket connection...');
-    const newSocket = io('http://localhost:3000', {
+    const newSocket = io(import.meta.env.VITE_BACKEND_URL, {
       transports: ['websocket'],
       autoConnect: true
     });
@@ -138,7 +134,7 @@ function ContentExplorer(): JSX.Element {
     try {
       const authToken = localStorage.getItem('authToken');
       await axios.post(
-        'http://localhost:3000/api/contents',
+        `${import.meta.env.VITE_BACKEND_URL}/api/contents`,
         data,
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
@@ -155,7 +151,7 @@ function ContentExplorer(): JSX.Element {
     try {
       const authToken = localStorage.getItem('authToken');
       await axios.put(
-        `http://localhost:3000/api/contents/${selectedContent._id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/contents/${selectedContent._id}`,
         data,
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
@@ -172,7 +168,7 @@ function ContentExplorer(): JSX.Element {
     try {
       const authToken = localStorage.getItem('authToken');
       await axios.delete(
-        `http://localhost:3000/api/contents/${selectedContent._id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/contents/${selectedContent._id}`,
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
       setIsDeleteModalOpen(false);
