@@ -7,7 +7,9 @@ import { ICategory } from '../models/category.model';
 const connectDB = async (): Promise<void> => {
   try {
     const dbName = 'your_database_name'; // Replace with your desired database name
-    await mongoose.connect(process.env.MONGODB_URI || `mongodb://crs_user:123456@localhost:27017/`, {dbName: 'content-creator-app'});
+    await mongoose.connect(
+      process.env.MONGODB_URI || `mongodb://crs_user:123456@localhost:27017/`,
+      {dbName: 'content-creator-app'});
     console.log(`MongoDB connected to database: ${dbName}`);
 
     // Initialize collections

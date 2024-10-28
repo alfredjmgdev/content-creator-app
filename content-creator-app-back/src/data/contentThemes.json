@@ -4,34 +4,34 @@
     "name": "Nature",
     "description": "Content related to natural landscapes, wildlife, and environmental topics",
     "categoriesIds": ["1", "2", "3"],
-    "coverImage": "https://www.shutterstock.com/shutterstock/photos/1712053135/display_1500/stock-photo-frame-of-food-ingredients-menu-cover-template-top-view-1712053135.jpg"
+    "coverImage": "https://fastly.picsum.photos/id/566/400/400.jpg?hmac=5UDz61UKXllK-nLTDIGGM-v8-qFz1F-wY6_9iVW8O2k"
   },
   {
     "id": "2",
     "name": "Cooking",
     "description": "Recipes, cooking techniques, and culinary content",
     "categoriesIds": ["1", "2", "3"],
-    "coverImage": "/images/themes/cooking.jpg"
+    "coverImage": "https://fastly.picsum.photos/id/521/400/400.jpg?hmac=AXwbsOVgMvJJ4Z6_j8yjLGZIeR9PjvgMz4ktuQ6gA90"
   },
   {
     "id": "3",
     "name": "History",
     "description": "Historical events, figures, and educational content about the past",
     "categoriesIds": ["1", "2", "3"],
-    "coverImage": "/images/themes/history.jpg"
+    "coverImage": "https://fastly.picsum.photos/id/281/400/400.jpg?hmac=lTYuN8YGc4vuCRgIhn1KW5vg7sFOIqcNFxUxkOO32Qg"
   },
   {
     "id": "4",
     "name": "Programming",
     "description": "Coding tutorials, programming languages, and software development",
     "categoriesIds": ["2", "3"],
-    "coverImage": "/images/themes/programming.jpg"
+    "coverImage": "https://fastly.picsum.photos/id/127/400/400.jpg?hmac=3J6eAN-6x1XlviVDKwzoZiAH5XnV-Y2eI4LilK4ZtAk"
   },
   {
     "id": "5",
     "name": "Science",
     "description": "Scientific discoveries, theories, and educational content across various scientific disciplines",
     "categoriesIds": ["1", "2", "3"],
-    "coverImage": "/images/themes/science.jpg"
+    "coverImage": "https://fastly.picsum.photos/id/187/400/400.jpg?hmac=BjRyAXcKY8vWedpDAzkOJEt7BamqirIl8dnqanqGMf4"
   }
 ]

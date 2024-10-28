@@ -3,10 +3,10 @@ import { useTheme } from '../utils';
 import { ContentItemResponse, User, ExplorerData } from '../types';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import CreateContentModal from './ContentModals/CreateContentModal';
-import UpdateContentModal from './ContentModals/UpdateContentModal';
-import DeleteContentModal from './ContentModals/DeleteContentModal';
-import DetailsContentModal from './ContentModals/DetailsContentModal';
+import DeleteContentModal from '../components/ContentModals/DeleteContentModal';
+import DetailsContentModal from '../components/ContentModals/DetailsContentModal';
+import CreateContentModal from '../components/ContentModals/CreateContentModal';
+import UpdateContentModal from '../components/ContentModals/UpdateContentModal';
 
 function ContentExplorer(): JSX.Element {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -124,7 +124,7 @@ function ContentExplorer(): JSX.Element {
     <div className="flex flex-col min-h-screen bg-background-light dark:bg-background-dark">
       <header className="bg-primary-light dark:bg-primary-dark p-4">
         <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-          <h1 className="text-2xl font-bold text-white">Explorador de Contenido</h1>
+          <h1 className="text-2xl font-bold text-white">Content Creator App {import.meta.env.VITE_BACKEND_URL}</h1>
           <div className="flex sm:flex-row flex-col justify-center sm:justify-end sm:space-y-0 gap-[10px]">
             {isAuthenticated && user ? (
               <div className="relative">
@@ -203,7 +203,30 @@ function ContentExplorer(): JSX.Element {
               key={content._id}
               className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md"
             >
-              <h2 className="text-xl font-bold mb-2">{content.title}</h2>
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <h2 className="text-xl font-bold mb-2">{content.title}</h2>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    <p>Creado por: {content.userId.username}</p>
+                    <p>Fecha: {new Date(content.createdAt).toLocaleDateString()}</p>
+                  </div>
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Temas:</p>
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      {content.themesIds.map((theme) => (
+                        <div key={theme._id} className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 rounded-lg p-2">
+                          <img 
+                            src={theme.coverImage} 
+                            alt={theme.name}
+                            className="w-6 h-6 rounded-full object-cover"
+                          />
+                          <span className="text-sm">{theme.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div className="flex gap-2 mt-4">
                 <button
                   onClick={() => handleViewDetails(content)}
@@ -231,19 +254,12 @@ function ContentExplorer(): JSX.Element {
         </div>
       </main>
 
-      {/* Updated Modal components */}
+      {/* Modal components */}
       <CreateContentModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         onSubmit={handleCreateSubmit}
-        themes={explorerData?.themes || []}
-        categories={explorerData?.categories || []}
-      />
-      <UpdateContentModal
-        isOpen={isUpdateModalOpen}
-        onClose={() => setIsUpdateModalOpen(false)}
-        content={selectedContent}
-        onSubmit={handleUpdateSubmit}
+        explorerData={explorerData}
       />
       <DeleteContentModal
         isOpen={isDeleteModalOpen}
@@ -257,7 +273,13 @@ function ContentExplorer(): JSX.Element {
         content={selectedContent}
         explorerData={explorerData}
       />
-
+      <UpdateContentModal
+        isOpen={isUpdateModalOpen}
+        onClose={() => setIsUpdateModalOpen(false)}
+        onSubmit={handleUpdateSubmit}
+        explorerData={explorerData}
+        content={selectedContent}
+      />
       <footer className="bg-primary-light dark:bg-primary-dark p-4 mt-auto">
         <div className="container mx-auto text-center text-white">
           <p>&copy; 2023 Explorador de Contenido. Todos los derechos reservados.</p>

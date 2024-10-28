@@ -65,6 +65,7 @@ export interface ThemeResponse {
   name: string;
   description: string;
   coverImage: string;
+  categoriesIds: CategoryResponse[]; // Add this line
 }
 
 export interface ValueResponse {

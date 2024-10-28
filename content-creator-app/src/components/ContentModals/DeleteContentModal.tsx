@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { ContentItemResponse } from '../../types';
 
 interface DeleteContentModalProps {
