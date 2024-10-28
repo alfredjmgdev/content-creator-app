@@ -10,6 +10,8 @@ import authRoutes from './routes/auth.routes';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import contentExplorerRoutes from './routes/contentExplorer.routes';
+import { Server } from 'socket.io';
+import { SocketService } from './services/socket.service';
 
 const app = express();
 
@@ -60,5 +62,11 @@ app.use((req, res, next) => {
   console.log(`No route found for ${req.method} ${req.url}`);
   res.status(404).send('Not found');
 });
+
+// Initialize Socket.IO service
+export const initializeSocket = (io: Server) => {
+  const socketService = SocketService.getInstance();
+  socketService.setIO(io);
+};
 
 export default app;

@@ -56,6 +56,7 @@ const ContentCategoriesView: React.FC = () => {
       });
       setCategories([...categories, response.data]);
       setIsCreateModalOpen(false);
+      window.location.reload();
     } catch (error) {
       console.error('Error creating category:', error);
       alert('Failed to create category');
@@ -72,6 +73,7 @@ const ContentCategoriesView: React.FC = () => {
       });
       setCategories(categories.map(c => c._id === updatedCategory._id ? response.data : c));
       setIsUpdateModalOpen(false);
+      window.location.reload();
     } catch (error) {
       console.error('Error updating category:', error);
       alert('Failed to update category');
@@ -88,6 +90,7 @@ const ContentCategoriesView: React.FC = () => {
       });
       setCategories(categories.filter(category => category._id !== id));
       setIsDeleteModalOpen(false);
+      window.location.reload();
     } catch (error) {
       console.error('Error deleting category:', error);
       alert('Failed to delete category');

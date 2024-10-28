@@ -7,6 +7,7 @@ import DeleteContentModal from '../components/ContentModals/DeleteContentModal';
 import DetailsContentModal from '../components/ContentModals/DetailsContentModal';
 import CreateContentModal from '../components/ContentModals/CreateContentModal';
 import UpdateContentModal from '../components/ContentModals/UpdateContentModal';
+import { io, Socket } from 'socket.io-client';
 
 function ContentExplorer(): JSX.Element {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -20,6 +21,7 @@ function ContentExplorer(): JSX.Element {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   // Add this helper function at the beginning of the component
   const isAdmin = user?.type === 'admin';
@@ -39,17 +41,57 @@ function ContentExplorer(): JSX.Element {
         setIsAuthenticated(false);
         setUser(null);
       }
-
-      // Fetch explorer data
-      const explorerResponse = await axios.get<ExplorerData>('http://localhost:3000/api/explorer');
-      setExplorerData(explorerResponse.data);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching user data:', error);
     }
   };
 
+  // Initial data fetch
+  const fetchExplorerData = async () => {
+    try {
+      const response = await axios.get<ExplorerData>('http://localhost:3000/api/explorer');
+      setExplorerData(response.data);
+    } catch (error) {
+      console.error('Error fetching explorer data:', error);
+    }
+  };
+
+  // Socket connection setup
   useEffect(() => {
+    console.log('Setting up WebSocket connection...');
+    const newSocket = io('http://localhost:3000', {
+      transports: ['websocket'],
+      autoConnect: true
+    });
+
+    newSocket.on('connect', () => {
+      console.log('Connected to WebSocket', newSocket.id);
+    });
+
+    newSocket.on('connect_error', (error) => {
+      console.error('WebSocket connection error:', error);
+    });
+
+    newSocket.on('contentUpdated', (updatedData: ExplorerData) => {
+      console.log('Received updated content:', updatedData);
+      setExplorerData(updatedData);
+    });
+
+    newSocket.on('disconnect', (reason) => {
+      console.log('Disconnected from WebSocket:', reason);
+    });
+
+    // Store socket in state
+    setSocket(newSocket);
+
+    // Initial data fetches
     fetchData();
+    fetchExplorerData();
+
+    // Cleanup on unmount
+    return () => {
+      newSocket.disconnect();
+    };
   }, []);
 
   const handleLogout = () => {
@@ -87,7 +129,8 @@ function ContentExplorer(): JSX.Element {
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
       setIsCreateModalOpen(false);
-      fetchData();
+      window.location.reload();
+      // No need to fetch data, the socket will handle the update
     } catch (error) {
       console.error('Error creating content:', error);
     }
@@ -103,7 +146,8 @@ function ContentExplorer(): JSX.Element {
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
       setIsUpdateModalOpen(false);
-      fetchData();
+      window.location.reload();
+      // No need to fetch data, the socket will handle the update
     } catch (error) {
       console.error('Error updating content:', error);
     }
@@ -118,7 +162,8 @@ function ContentExplorer(): JSX.Element {
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
       setIsDeleteModalOpen(false);
-      fetchData();
+      window.location.reload();
+      // No need to fetch data, the socket will handle the update
     } catch (error) {
       console.error('Error deleting content:', error);
     }

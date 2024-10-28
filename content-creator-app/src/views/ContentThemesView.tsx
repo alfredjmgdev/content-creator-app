@@ -59,6 +59,7 @@ const ContentThemesView: React.FC = () => {
       });
       setThemes([...themes, response.data]);
       setIsCreateModalOpen(false);
+      window.location.reload();
     } catch (error) {
       console.error('Error creating theme:', error);
       alert('Failed to create theme');
@@ -75,6 +76,7 @@ const ContentThemesView: React.FC = () => {
       });
       setThemes(themes.map(t => t._id === updatedTheme._id ? response.data : t));
       setIsUpdateModalOpen(false);
+      window.location.reload();
     } catch (error) {
       console.error('Error updating theme:', error);
       alert('Failed to update theme');
@@ -91,6 +93,7 @@ const ContentThemesView: React.FC = () => {
       });
       setThemes(themes.filter(theme => theme._id !== id));
       setIsDeleteModalOpen(false);
+      window.location.reload();
     } catch (error) {
       console.error('Error deleting theme:', error);
       alert('Failed to delete theme');
