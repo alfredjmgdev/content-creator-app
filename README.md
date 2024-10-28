@@ -7,7 +7,6 @@ A full-stack application designed for content creators, built with React + Vite 
 ### Frontend
 - React.js with Vite
 - Tailwind CSS for styling
-- [Add any additional frontend libraries you're using]
 
 ### Backend
 - Node.js
